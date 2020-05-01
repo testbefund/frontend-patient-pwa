@@ -9,25 +9,22 @@
       <div v-if="!readId">
         Kein Test geladen. Bitte rufen sie www.testbefund.de über den ihnen übergebenen QR-Code auf!
       </div>
-      <div v-if="loading">
+      <div v-if="loading" style="display: flex; flex-direction: column">
         Testergbnisse werden geladen...
         <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate"></md-progress-spinner>
       </div>
       <div v-if="container" style="display: flex; flex-direction: column">
-        <h4>Übersicht ihrer Testergebnisse</h4>
-        <div style="display: flex; flex-direction: column; margin-bottom: 8px">
-          <span>In Bearbeitung: {{inProgressCount()}} / {{totalCount()}}</span>
-          <span>In Prüfung: {{reviewPendingCount()}} / {{totalCount()}}</span>
-          <span> Ergebnis vorhanden: {{doneCount()}} / {{totalCount()}}</span>
+        <div style="display: flex; flex-direction: row">
+          <img src="../assets/undraw_science_fqhl.svg" alt="laboratory image" style="width: 80px">
+          <h2 style="margin-left: 16px">
+            Ihr Testergebnis <br/>
+            vom {{testDate()}}
+          </h2>
         </div>
-        <div v-for="test in container.tests" :key="test.title">
-          <div>
-            <span>Testergebnis für </span><span class="test-title">{{test.title}}:</span>
-            <span> {{ renderTestResult(test)}}</span>
-          </div>
-        </div>
+        <md-list class="md-double-line md-scrollbar" style="max-height: 65vh; overflow: auto">
+            <TestResultItem v-for="test in sortedTests()" :key="test.title" :test="test"></TestResultItem>
+        </md-list>
       </div>
-
     </md-app-content>
   </md-app>
 </template>
@@ -36,9 +33,10 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { TestbefundClient } from '@/client/TestbefundClient'
 import { TestContainerRead } from '@/client/TestContainerRead'
-import { TestCaseRead } from '@/client/TestCaseRead'
-
-    @Component
+import TestResultItem from '@/components/TestResultItem.vue'
+@Component({
+  components: { TestResultItem }
+})
 export default class HelloWorld extends Vue {
         container: TestContainerRead | null = null;
         readId: string | null = ''
@@ -79,32 +77,22 @@ export default class HelloWorld extends Vue {
           this.fetchData()
         }
 
-        private renderTestStatus (status: string) {
-          if (status === 'IN_PROGRESS') {
-            return 'In Bearbeitung'
-          }
-          if (status === 'REVIEW_PENDING') {
-            return 'Ergebnis wird geprüft'
-          }
-          return status
-        }
-
-        renderTestResult (test: TestCaseRead) {
-          if (test.status === 'DONE') {
-            if (test.infected === 'POSITIVE') {
-              return 'Positiv'
-            }
-            if (test.infected === 'NEGATIVE') {
-              return 'Negativ'
-            }
-            return test.infected
-          }
-          return this.renderTestStatus(test.status)
-        }
-
         @Watch('$route')
         onPropertyChanged () {
           this.fetchData()
+        }
+
+        testDate () {
+          if (this.container) {
+            return new Intl.DateTimeFormat(navigator.language).format(new Date(this.container.date))
+          }
+        }
+
+        sortedTests () {
+          if (this.container) {
+            return [...this.container.tests].sort((t1, t2) => t1.title.localeCompare(t2.title))
+          }
+          return []
         }
 }
 </script>
