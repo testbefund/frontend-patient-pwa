@@ -1,5 +1,15 @@
 # frontend-patient-pwa
 
+# API Configurations
+You can configure this PWA to use an arbitrary Testbefund API. 
+
+## Docker
+When running the docker image, set the TESTBEFUND_API_URL environment variable. During startup, this env is written
+into the config.js, which is delivered with the index.html. 
+
+## Local
+Copy the sample-config.js into config.js, replace the url as needed.
+
 ## Project setup
 ```
 npm install

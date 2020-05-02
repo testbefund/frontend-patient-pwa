@@ -1,0 +1,8 @@
+version: '3.1'
+services:
+  pwa:
+    image: frontend-patient-pwa:local
+    ports:
+      - 8080:80
+    environment:
+      TESTBEFUND_API_URL: https://api.testbefund.nt-dev.eu

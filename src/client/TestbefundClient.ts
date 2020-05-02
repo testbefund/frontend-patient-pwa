@@ -4,8 +4,7 @@ import axios from 'axios'
 
 export class TestbefundClient {
   getContainerByReadId (readId: string): Promise<TestContainerRead> {
-    // TODO somehow make this configurable
-    const url = `https://api.testbefund.nt-dev.eu/v1/test/container/${readId}`
+    const url = `${TESTBEFUND_API_URL}/v1/test/container/${readId}`
     return axios.get(url)
       .then(result => result.data)
       .catch(err => {
