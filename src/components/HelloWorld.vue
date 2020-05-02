@@ -15,7 +15,7 @@
       </div>
       <div v-if="container" style="display: flex; flex-direction: column">
         <div style="display: flex; flex-direction: row">
-          <img src="../assets/undraw_science_fqhl.svg" alt="laboratory image" style="width: 80px">
+          <img src="../assets/undraw_science_fqhl.svg" alt="laboratory image" style="width: 80px; height: auto">
           <h2 style="margin-left: 16px">
             Ihr Testergebnis <br/>
             vom {{testDate()}}
