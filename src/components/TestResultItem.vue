@@ -10,7 +10,7 @@
         <p>
           Der Test wurde ausgestellt durch {{test.client.name}}. Wenn sie nach bekanntwerden ihres Ergebnisses Redebarf
           haben, melden sich sich gerne
-          unter <a :href="'fon:' + test.client.telefon" target="_blank">{{test.client.telefon}}</a> (Erreichbar
+          unter <a :href="'tel:' + test.client.telefon" target="_blank">{{test.client.telefon}}</a> (Erreichbar
           {{test.client.openingHours}}).
         </p>
         <p>
@@ -18,7 +18,7 @@
                                                    target="_blank">{{test.client.homepage}}</a> finden.
         </p>
         <div>
-          <md-button class="md-fab" :href="'fon:' + test.client.telefon">
+          <md-button class="md-fab" :href="'tel:' + test.client.telefon">
             <md-icon>phone</md-icon>
           </md-button>
           <md-button class="md-fab" :href="test.client.homepage" target="_blank">
