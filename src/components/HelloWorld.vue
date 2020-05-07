@@ -1,32 +1,28 @@
 <template>
-  <md-app md-waterfall md-mode="overlap">
-    <md-app-toolbar class="md-primary md-large">
-      <div class="md-toolbar-row">
-        <img src="../assets/testbefund_logo.png" alt="Testbefund Logo" style="margin-top: 24px">
-      </div>
-    </md-app-toolbar>
-    <md-app-content style="height: 80vh">
-      <div v-if="!readId">
-        Kein Test geladen. Bitte rufen sie www.testbefund.de über den ihnen übergebenen QR-Code auf!
-      </div>
-      <div v-if="loading" style="display: flex; flex-direction: column">
-        Testergbnisse werden geladen...
-        <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate"></md-progress-spinner>
-      </div>
-      <div v-if="container" style="display: flex; flex-direction: column">
-        <div style="display: flex; flex-direction: row">
-          <img src="../assets/undraw_science_fqhl.svg" alt="laboratory image" style="width: 80px; height: 74px">
-          <h2 style="margin-left: 16px">
-            Ihr Testergebnis <br/>
-            vom {{testDate()}}
-          </h2>
+  <div class="page-container">
+    <md-app md-waterfall md-mode="fixed" style="height: 100vh">
+      <md-app-toolbar class="md-small" style=" z-index: 10">
+        <div class="md-toolbar-row">
+          <img src="../assets/testbefund_logo.png" alt="Testbefund Logo">
         </div>
-        <md-list class="md-double-line md-scrollbar" style="max-height: 65vh; overflow: auto">
-            <TestResultItem v-for="test in sortedTests()" :key="test.title" :test="test"></TestResultItem>
+      </md-app-toolbar>
+      <md-app-content style="z-index: 0">
+        <div v-if="!container">
+          <div v-if="!readId">
+            Kein Test geladen. Bitte rufen sie www.testbefund.de über den ihnen übergebenen QR-Code auf!
+          </div>
+          <div v-if="loading" style="display: flex; flex-direction: column">
+            Testergbnisse werden geladen...
+            <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate"></md-progress-spinner>
+          </div>
+        </div>
+        <TestContainerStatus v-if="!loading && container" :container="container"></TestContainerStatus>
+        <md-list class="md-double-line">
+          <TestResultItem v-for="test in sortedTests()" :key="test.title" :test="test"></TestResultItem>
         </md-list>
-      </div>
-    </md-app-content>
-  </md-app>
+      </md-app-content>
+    </md-app>
+  </div>
 </template>
 
 <script lang="ts">
@@ -34,8 +30,9 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 import { TestbefundClient } from '@/client/TestbefundClient'
 import { TestContainerRead } from '@/client/TestContainerRead'
 import TestResultItem from '@/components/TestResultItem.vue'
+import TestContainerStatus from '@/components/TestContainerStatus.vue'
 @Component({
-  components: { TestResultItem }
+  components: { TestContainerStatus, TestResultItem }
 })
 export default class HelloWorld extends Vue {
         container: TestContainerRead | null = null;
@@ -99,7 +96,4 @@ export default class HelloWorld extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .test-title {
-    font-weight: bold;
-  }
 </style>
