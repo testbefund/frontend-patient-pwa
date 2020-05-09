@@ -60,6 +60,10 @@ export default class HelloWorld extends Vue {
           }
         }
 
+        created (): void {
+          this.fetchData()
+        }
+
         @Watch('$route')
         onPropertyChanged () {
           this.fetchData()
