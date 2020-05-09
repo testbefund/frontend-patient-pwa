@@ -4,11 +4,7 @@
 
 <style lang="scss">
   @import "~vue-material/dist/theme/engine";
-
-  $primary: #3894FF;
-  $accent: #ffaa00;
-  $textColor: white;
-  $background: white;
+  @import "variables";
 
   @include md-register-theme("default", (
     primary: $primary, // The primary color of your application

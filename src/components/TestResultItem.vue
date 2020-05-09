@@ -1,8 +1,11 @@
 <template>
   <md-list-item>
     <div class="md-list-item-text">
-      <span>{{test.title}} ({{test.icd_code}})</span>
-      <span>{{renderTestResult()}}</span>
+      <div class="test-status-container">
+        <span>{{test.title}} ({{test.icd_code}})</span>
+        <span class="test-result-text">{{renderTestResult()}}</span>
+      </div>
+
     </div>
     <md-button class="md-icon-button md-list-action" v-if="test.client" @click="infoOpen = true">
       <md-icon>contact_phone</md-icon>
@@ -23,10 +26,10 @@ export default class TestResultItem extends Vue {
 
         private renderTestStatus () {
           if (this.test.status === 'IN_PROGRESS') {
-            return 'Test In Bearbeitung'
+            return 'In Bearbeitung'
           }
           if (this.test.status === 'REVIEW_PENDING') {
-            return 'Testergebnis wird geprüft'
+            return 'Wird geprüft'
           }
           return this.test.status
         }
@@ -34,10 +37,10 @@ export default class TestResultItem extends Vue {
         renderTestResult () {
           if (this.test.status === 'DONE') {
             if (this.test.infected === 'POSITIVE') {
-              return 'Testbefund: Positiv'
+              return 'Positiv'
             }
             if (this.test.infected === 'NEGATIVE') {
-              return 'Testbefund: Negativ'
+              return 'Negativ'
             }
             return this.test.infected
           }
@@ -47,5 +50,13 @@ export default class TestResultItem extends Vue {
 </script>
 
 <style scoped>
+
+  .test-result-text {
+    text-align: right; margin-right: 8px
+  }
+
+  .test-status-container {
+    display: flex;
+  }
 
 </style>

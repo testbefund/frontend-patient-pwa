@@ -7,36 +7,7 @@
         </div>
       </md-app-toolbar>
       <md-app-content style="z-index: 0">
-        <md-dialog v-if="container && container.client" :md-active.sync="infoOpen">
-          <md-dialog-title>Test Ausgestellt durch {{container.client.name}}</md-dialog-title>
-          <md-content style="padding: 0 24px 0">
-            <p>
-              Informationen zur Teststelle:<br/>
-              <span style="white-space: pre">{{container.client.name}}<br/>{{container.client.address}}</span>
-            </p>
-            <p>
-              Der Test wurde ausgestellt durch {{container.client.name}}. Wenn sie nach bekanntwerden ihres Ergebnisses Redebarf
-              haben, melden sich sich gerne
-              unter <a :href="'tel:' + container.client.telefon" target="_blank">{{container.client.telefon}}</a> (Erreichbar
-              {{container.client.openingHours}}).
-            </p>
-            <p>
-              Sie können uns auch im Internet unter <a :href="container.client.homepage"
-                                                       target="_blank">{{container.client.homepage}}</a> finden.
-            </p>
-            <div>
-              <md-button class="md-fab" :href="'tel:' + container.client.telefon">
-                <md-icon>phone</md-icon>
-              </md-button>
-              <md-button class="md-fab" :href="container.client.homepage" target="_blank">
-                <md-icon>language</md-icon>
-              </md-button>
-            </div>
-          </md-content>
-          <md-dialog-actions>
-            <md-button class="md-primary" @click="infoOpen = false">Schließen</md-button>
-          </md-dialog-actions>
-        </md-dialog>
+        <TestIssuerDialog v-if="container" :client="container.client" @close="infoOpen = false" :open="infoOpen"></TestIssuerDialog>
         <div v-if="!container">
           <div v-if="!readId">
             Kein Test geladen. Bitte rufen sie www.testbefund.de über den ihnen übergebenen QR-Code auf!
@@ -64,8 +35,9 @@ import { TestbefundClient } from '@/client/TestbefundClient'
 import { TestContainerRead } from '@/client/TestContainerRead'
 import TestResultItem from '@/components/TestResultItem.vue'
 import TestContainerStatus from '@/components/TestContainerStatus.vue'
+import TestIssuerDialog from '@/components/TestIssuerDialog.vue'
 @Component({
-  components: { TestContainerStatus, TestResultItem }
+  components: { TestIssuerDialog, TestContainerStatus, TestResultItem }
 })
 export default class HelloWorld extends Vue {
         container: TestContainerRead | null = null
@@ -88,35 +60,9 @@ export default class HelloWorld extends Vue {
           }
         }
 
-        inProgressCount () {
-          return this.container?.tests.filter(test => test.status === 'IN_PROGRESS').length
-        }
-
-        reviewPendingCount () {
-          return this.container?.tests.filter(test => test.status === 'REVIEW_PENDING').length
-        }
-
-        doneCount () {
-          return this.container?.tests.filter(test => test.status === 'DONE').length
-        }
-
-        totalCount () {
-          return this.container?.tests.length
-        }
-
-        created (): void {
-          this.fetchData()
-        }
-
         @Watch('$route')
         onPropertyChanged () {
           this.fetchData()
-        }
-
-        testDate () {
-          if (this.container) {
-            return new Intl.DateTimeFormat(navigator.language).format(new Date(this.container.date))
-          }
         }
 
         sortedTests () {
