@@ -5,5 +5,4 @@ export interface TestCaseRead {
   icd_code: string;
   infected: string;
   status: string;
-  client?: TestCaseClient;
 }

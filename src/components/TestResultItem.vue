@@ -1,37 +1,5 @@
 <template>
   <md-list-item>
-    <md-dialog :md-active.sync="infoOpen">
-      <md-dialog-title>Test Ausgestellt durch {{test.client.name}}</md-dialog-title>
-      <md-content style="padding: 0 24px 0">
-        <p>
-          Informationen zur Teststelle:<br/>
-          <span style="white-space: pre">{{test.client.name}}<br/>{{test.client.address}}</span>
-        </p>
-        <p>
-          Der Test wurde ausgestellt durch {{test.client.name}}. Wenn sie nach bekanntwerden ihres Ergebnisses Redebarf
-          haben, melden sich sich gerne
-          unter <a :href="'tel:' + test.client.telefon" target="_blank">{{test.client.telefon}}</a> (Erreichbar
-          {{test.client.openingHours}}).
-        </p>
-        <p>
-          Sie können uns auch im Internet unter <a :href="test.client.homepage"
-                                                   target="_blank">{{test.client.homepage}}</a> finden.
-        </p>
-        <div>
-          <md-button class="md-fab" :href="'tel:' + test.client.telefon">
-            <md-icon>phone</md-icon>
-          </md-button>
-          <md-button class="md-fab" :href="test.client.homepage" target="_blank">
-            <md-icon>language</md-icon>
-          </md-button>
-        </div>
-      </md-content>
-      <md-dialog-actions>
-
-        <md-button class="md-primary" @click="infoOpen = false">Schließen</md-button>
-
-      </md-dialog-actions>
-    </md-dialog>
     <div class="md-list-item-text">
       <span>{{test.title}} ({{test.icd_code}})</span>
       <span>{{renderTestResult()}}</span>

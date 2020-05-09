@@ -3,7 +3,7 @@ import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
-import { MdApp, MdToolbar, MdButton, MdIcon, MdCard, MdList, MdProgress, MdDivider, MdDialog, MdContent } from 'vue-material/dist/components'
+import { MdApp, MdToolbar, MdButton, MdIcon, MdCard, MdList, MdProgress, MdDivider, MdDialog, MdContent, MdBottomBar } from 'vue-material/dist/components'
 import 'vue-material/dist/vue-material.min.css'
 import './config'
 
@@ -19,6 +19,7 @@ Vue.use(MdProgress)
 Vue.use(MdDivider)
 Vue.use(MdDialog)
 Vue.use(MdContent)
+Vue.use(MdBottomBar)
 
 new Vue({
   router,

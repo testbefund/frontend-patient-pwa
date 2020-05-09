@@ -1,12 +1,42 @@
 <template>
   <div class="page-container">
-    <md-app md-waterfall md-mode="fixed" style="height: 100vh">
+    <md-app md-waterfall md-mode="fixed" style="height: calc(100vh - 56px)">
       <md-app-toolbar class="md-small" style=" z-index: 10">
         <div class="md-toolbar-row">
           <img src="../assets/testbefund_logo.png" alt="Testbefund Logo">
         </div>
       </md-app-toolbar>
       <md-app-content style="z-index: 0">
+        <md-dialog v-if="container && container.client" :md-active.sync="infoOpen">
+          <md-dialog-title>Test Ausgestellt durch {{container.client.name}}</md-dialog-title>
+          <md-content style="padding: 0 24px 0">
+            <p>
+              Informationen zur Teststelle:<br/>
+              <span style="white-space: pre">{{container.client.name}}<br/>{{container.client.address}}</span>
+            </p>
+            <p>
+              Der Test wurde ausgestellt durch {{container.client.name}}. Wenn sie nach bekanntwerden ihres Ergebnisses Redebarf
+              haben, melden sich sich gerne
+              unter <a :href="'tel:' + container.client.telefon" target="_blank">{{container.client.telefon}}</a> (Erreichbar
+              {{container.client.openingHours}}).
+            </p>
+            <p>
+              Sie können uns auch im Internet unter <a :href="container.client.homepage"
+                                                       target="_blank">{{container.client.homepage}}</a> finden.
+            </p>
+            <div>
+              <md-button class="md-fab" :href="'tel:' + container.client.telefon">
+                <md-icon>phone</md-icon>
+              </md-button>
+              <md-button class="md-fab" :href="container.client.homepage" target="_blank">
+                <md-icon>language</md-icon>
+              </md-button>
+            </div>
+          </md-content>
+          <md-dialog-actions>
+            <md-button class="md-primary" @click="infoOpen = false">Schließen</md-button>
+          </md-dialog-actions>
+        </md-dialog>
         <div v-if="!container">
           <div v-if="!readId">
             Kein Test geladen. Bitte rufen sie www.testbefund.de über den ihnen übergebenen QR-Code auf!
@@ -22,6 +52,9 @@
         </md-list>
       </md-app-content>
     </md-app>
+    <md-bottom-bar style="height: 56px;">
+      <md-bottom-bar-item @click="infoOpen = true" md-label="Kontakt" md-icon="contact_phone"></md-bottom-bar-item>
+    </md-bottom-bar>
   </div>
 </template>
 
@@ -35,9 +68,10 @@ import TestContainerStatus from '@/components/TestContainerStatus.vue'
   components: { TestContainerStatus, TestResultItem }
 })
 export default class HelloWorld extends Vue {
-        container: TestContainerRead | null = null;
+        container: TestContainerRead | null = null
         readId: string | null = ''
         loading = false
+        infoOpen = false
 
         fetchData () {
           this.container = null
@@ -94,6 +128,9 @@ export default class HelloWorld extends Vue {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
+  .md-bottom-bar>.md-ripple {
+    align-items: center !important;
+    justify-content: center !important;
+  }
 </style>
